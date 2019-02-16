@@ -199,9 +199,8 @@ pcl::CropHull<PointT>::applyFilter3D (PointCloud &output)
         crossings[ray] += rayTriangleIntersect
           (input_->points[(*indices_)[index]], rays[ray], hull_polygons_[poly], *hull_cloud_);
 
-    if (crop_outside_ && (crossings[0]&1) + (crossings[1]&1) + (crossings[2]&1) > 1)
-      output.push_back (input_->points[(*indices_)[index]]);
-    else if (!crop_outside_)
+    bool isPointInsideHull = (crossings[0]&1) + (crossings[1]&1) + (crossings[2]&1) > 1;
+    if ((crop_outside_ && isPointInsideHull) || (!crop_outside_ && !isPointInsideHull)) 
       output.push_back (input_->points[(*indices_)[index]]);
   }
 }
@@ -226,9 +225,8 @@ pcl::CropHull<PointT>::applyFilter3D (std::vector<int> &indices)
         crossings[ray] += rayTriangleIntersect
           (input_->points[(*indices_)[index]], rays[ray], hull_polygons_[poly], *hull_cloud_);
 
-    if (crop_outside_ && (crossings[0]&1) + (crossings[1]&1) + (crossings[2]&1) > 1)
-      indices.push_back ((*indices_)[index]);
-    else if (!crop_outside_)
+    bool isPointInsideHull = (crossings[0]&1) + (crossings[1]&1) + (crossings[2]&1) > 1;
+    if ((crop_outside_ && isPointInsideHull) || (!crop_outside_ && !isPointInsideHull)) 
       indices.push_back ((*indices_)[index]);
   }
 }
